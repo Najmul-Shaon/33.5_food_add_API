@@ -1,5 +1,6 @@
-const loadFood = () => {
-    fetch('https://www.themealdb.com/api/json/v1/1/search.php?f=a')
+const loadFood = (search) => {
+    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
+    fetch(url)
         .then(res => res.json())
         .then(data => displayFood(data.meals));
 
@@ -8,8 +9,9 @@ const loadFood = () => {
 const displayFood = foods => {
 
     const container = document.getElementById('container');
+    container.innerHTML = '';
     for (const food of foods) {
-        console.log(food);
+        // console.log(food);
 
         const repeatDiv = document.createElement('div');
         repeatDiv.classList.add('col');
@@ -18,7 +20,7 @@ const displayFood = foods => {
                 <img src="${food.strMealThumb}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">${food.strMeal}</h5>
-                    <p class="card-text">${food.strInstructions}</p>
+                    <p class="card-text">${food.strInstructions.slice(0, 50)}</p>
                 </div>
             </div>
 `;
@@ -28,4 +30,13 @@ const displayFood = foods => {
     }
 }
 
-loadFood();
+
+const searchFood = () => {
+    const searchField = document.getElementById('search-field');
+    const searchText = searchField.value;
+    loadFood(searchText);
+    searchField.value = '';
+    // console.log('searching', searchText);
+}
+
+loadFood('a');
