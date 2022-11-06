@@ -16,7 +16,7 @@ const displayFood = foods => {
         const repeatDiv = document.createElement('div');
         repeatDiv.classList.add('col');
         repeatDiv.innerHTML = `
-    <div class="card">
+    <div onclick= loadMealDetails(${food.idMeal}) class="card">
                 <img src="${food.strMealThumb}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">${food.strMeal}</h5>
@@ -30,6 +30,31 @@ const displayFood = foods => {
     }
 }
 
+const loadMealDetails = (idMeal) => {
+
+    const IdUrl = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`;
+    fetch(IdUrl)
+        .then(res => res.json())
+        .then(details => displayDetails(details.meals[0]));
+    console.log('clicked', idMeal);
+}
+
+const displayDetails = detail => {
+    const detailsContainer = document.getElementById('details-container');
+    const newDetailDiv = document.createElement('div');
+    newDetailDiv.classList.add('card');
+    newDetailDiv.innerHTML = `
+    <img src="${detail.strMealThumb}" class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">${detail.strMeal}</h5>
+                <p class="card-text">${detail.strInstructions.slice(0,20)}</p>
+            </div>
+    `;
+    detailsContainer.appendChild(newDetailDiv);
+}
+
+
+
 
 const searchFood = () => {
     const searchField = document.getElementById('search-field');
@@ -39,4 +64,4 @@ const searchFood = () => {
     // console.log('searching', searchText);
 }
 
-loadFood('a');
+loadFood('');
